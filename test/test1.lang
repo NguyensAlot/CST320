@@ -2,6 +2,7 @@
 if
 then
 else
+for
 while
 print
 scan
