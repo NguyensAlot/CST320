@@ -24,7 +24,7 @@ integer         [0-9]+
 float           [0-9]+.[0-9]+
 operators       ==|&&|\|\||[+\-*/%=]
 punctuation     [.(){}[\];,\.]
-string          [a-zA-Z]+
+string          [a-zA-Z]+[0-9]*
 whitespace      [\t\r\n\v\f]
 
 %%
