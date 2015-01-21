@@ -1,7 +1,7 @@
 %{
 // lang lexer definition file
 //
-// Author: Phil Howard phil.howard@oit.edu
+// Author: Anthony Nguyen anthony.nguyen@oit.edu
 
 #include "tokens.h"
 
@@ -18,13 +18,12 @@ static int Return(int val);
 
     /* definitions go here. period is an example. */
 comment         "//".+$
-junk            [:@#\$]
 period          ['.']
-integer         [0-9]+
-float           [0-9]+.[0-9]+
-operators       ==|&&|\|\||[+\-*/%=]
-punctuation     [.(){}[\];,\.]
-string          [a-zA-Z]+[0-9]*
+integer         '-'?[0-9]+
+float           '-'?[0-9]+.[0-9]+
+operators       ==|&&|\|\||[+\-*/%<!=]
+punctuation     [(){}[\];,\.]
+string          [a-zA-Z][a-zA-Z0-9_]*
 whitespace      [\t\r\n\v\f]
 
 %%
@@ -45,12 +44,12 @@ whitespace      [\t\r\n\v\f]
 "char"                      RETURN(CHAR);
 {integer}                   RETURN(INT_VAL);
 {float}                     RETURN(FLOAT_VAL);
-{operators}                 RETURN(OPERATOR);
+{operators}                 RETURN(yytext[0]);
 {punctuation}               RETURN(yytext[0]);
-{junk}                      RETURN(JUNK_TOKEN);
 {comment}                   {};
 {string}                    RETURN(IDENTIFIER);
 {whitespace}                {};
+.                           RETURN(JUNK_TOKEN);
 
 
 %%
