@@ -2,8 +2,13 @@
 // lang lexer definition file
 //
 // Author: Anthony Nguyen anthony.nguyen@oit.edu
+//
+// Illustration showing how to use {} to control scope
 
-#include "tokens.h"
+#include "cSymbol.h"
+#include "cSymbolTable.h"
+#include "lex.h"
+#include "langparse.h"
 
 #define RETURN(a) return Return(a);
 static int Return(int val);
@@ -18,10 +23,10 @@ static int Return(int val);
 
     /* definitions go here. period is an example. */
 
-punctuation     [(){}\[\];,\.]
 operators       [+\-*/%<!=]
-string          [a-zA-Z][a-zA-Z0-9_]*
+identifier      [a-zA-Z][a-zA-Z0-9_]*
 integer         -?[0-9]+
+punctuation     [{}()\[\];,.]
 float           -?[0-9]+[\.][0-9]+
 whitespace      [' '\t\n]+
 comment         "//".*$
@@ -38,21 +43,20 @@ junk            .
 "while"                     RETURN(WHILE);
 "print"                     RETURN(PRINT);
 "scan"                      RETURN(SCAN);
-"int"                       RETURN(INT);
+"int"                       RETURN(INT_VAL);
 "float"                     RETURN(FLOAT);
 "struct"                    RETURN(STRUCT);
-"return"                    RETURN(RETURN_TOK);
-"char"                      RETURN(CHAR);
-"end"                       RETURN(END);
-{punctuation}               RETURN(yytext[0]);
-{operators}                 RETURN(yytext[0]);
-{string}                    RETURN(IDENTIFIER);
+{comment}                   //no comments
 {integer}                   RETURN(INT_VAL);
 {float}                     RETURN(FLOAT_VAL);
-{whitespace}                {};
-{comment}                   {};
-{junk}                      RETURN(JUNK_TOKEN);
-
+{operators}                 RETURN(yytext[0]);
+{punctuation}               RETURN(yytext[0]);
+{identifier}                {  
+                                yylval.symbol = symbolTableRoot->Insert(yytext);
+                                return (IDENTIFIER);
+                            }
+{whitespace}                //no whitespace
+.                           RETURN(JUNK_TOKEN);
 %%
 
 // This function allows us to do extra processing on each token
