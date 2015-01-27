@@ -17,14 +17,15 @@ static int Return(int val);
 
 
     /* definitions go here. period is an example. */
-comment         "//".+$
-period          ['.']
-integer         '-'?[0-9]+
-float           '-'?[0-9]+.[0-9]+
-operators       ==|&&|\|\||[+\-*/%<!=]
-punctuation     [(){}[\];,\.]
+
+punctuation     [(){}\[\];,\.]
+operators       [+\-*/%<!=]
 string          [a-zA-Z][a-zA-Z0-9_]*
-whitespace      [\t\r\n\v\f]
+integer         -?[0-9]+
+float           -?[0-9]+[\.][0-9]+
+whitespace      [' '\t\n]+
+comment         "//".*$
+junk            .
 
 %%
 
@@ -42,15 +43,15 @@ whitespace      [\t\r\n\v\f]
 "struct"                    RETURN(STRUCT);
 "return"                    RETURN(RETURN_TOK);
 "char"                      RETURN(CHAR);
+"end"                       RETURN(END);
+{punctuation}               RETURN(yytext[0]);
+{operators}                 RETURN(yytext[0]);
+{string}                    RETURN(IDENTIFIER);
 {integer}                   RETURN(INT_VAL);
 {float}                     RETURN(FLOAT_VAL);
-{operators}                 RETURN(yytext[0]);
-{punctuation}               RETURN(yytext[0]);
-{comment}                   {};
-{string}                    RETURN(IDENTIFIER);
 {whitespace}                {};
-.                           RETURN(JUNK_TOKEN);
-
+{comment}                   {};
+{junk}                      RETURN(JUNK_TOKEN);
 
 %%
 
