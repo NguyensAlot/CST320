@@ -1,17 +1,15 @@
 /*****************************************************
- * Class: cAstNode
+ * Class: cDeclNode
  * Author: Anthony Nguyen, Alexander Tappin
- * Primary: Alexander Tappin
- * Description: Abstract base class for abstract syntax tree
+ * Primary: Anthony Nguyen
+ * Description: Abstract base class for declaractions
  * **************************************************/
 #pragma once
-#include <iostream>
-#include <string>
-#include <list>
+#include "cAstNode.h"
 
 using namespace std;
 
-class cAstNode
+class cDeclNode : public cAstNode
 {
 public:
     virtual string toString() = 0;

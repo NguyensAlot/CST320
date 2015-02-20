@@ -1,7 +1,7 @@
 // parser
 //
-// Alex Tappin, Anthony Nguyen
-//
+// Author: Alexander Tappin, Anthony Nguyen
+// alexander.tappin@oit.edu, anthony.nguyen@oit.edu
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 #include "langparse.h"
 
 extern cAstNode* yyast_root;
-cSymbolTable * symbolTableRoot;
+cSymbolTable* symbolTableRoot;
 
 int main(int argc, char **argv)
 {

@@ -1,17 +1,14 @@
 /*****************************************************
- * Class: cAstNode
+ * Class: cStmtNode
  * Author: Anthony Nguyen, Alexander Tappin
- * Primary: Alexander Tappin
- * Description: Abstract base class for abstract syntax tree
+ * Primary: Anthony Nguyen
+ * Description: Abstract base class for statements
  * **************************************************/
 #pragma once
-#include <iostream>
-#include <string>
-#include <list>
 
 using namespace std;
 
-class cAstNode
+class cStmtNode
 {
 public:
     virtual string toString() = 0;
