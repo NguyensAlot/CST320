@@ -27,13 +27,12 @@ public:
     
     bool SemanticError()
     {
-        error = true;
+        error = false;
         if(_varRef->getType() != _expr->getType())
         {
-            //Do this
             if(_varRef->getType()->getSize() < _expr->getType()->getSize())
             {
-                error = false;
+                error = true;
             }
         }
         return error;

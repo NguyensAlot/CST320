@@ -24,16 +24,6 @@ string cSymbol::getmSymbol()
     return mSymbol;
 }
 
-/*bool cSymbol::isItType()
-{
-    return isType;
-}
-
-void cSymbol::setTypeTrue()
-{
-    isType = true;
-}*/
-
 cDeclNode* cSymbol::getType()
 {
     return _declNode;

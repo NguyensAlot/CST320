@@ -19,6 +19,8 @@ public:
     virtual bool IsFloat()          { return false; }
     virtual bool IsStruct()         { return false; }
     virtual bool IsArray()          { return false; }
+    // gives size of data type
     virtual int getSize() = 0;
+    // gives string type name
     virtual string stringType() = 0;
 };

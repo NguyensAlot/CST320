@@ -16,14 +16,13 @@ public:
     cSymbol(string symbol="");
     virtual string toString();
     string getmSymbol();
-    //bool isItType();
-    //void setTypeTrue();
+    
+    // getters and setters for new member variable
     cDeclNode* getType();
     void setType(cDeclNode* declNode);
     
 protected:
     string mSymbol;
-    //bool isType;
     int mSequence;
     static int symbolCount;
     cDeclNode* _declNode;

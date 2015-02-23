@@ -26,11 +26,20 @@ public:
     
     cDeclNode* getType()
     {
-        if (_expr1->getType() == _expr2->getType() || _expr1->getType()->IsFloat())
+        // if equal type return either
+        if (_expr1->getType() == _expr2->getType())
             return _expr1->getType();
-        else if (_expr2->getType()->IsFloat())
-            return _expr2->getType();
-        else 
+            
+        // if either are float, return float
+        else if (_expr1->getType()->IsFloat() || _expr2->getType()->IsFloat())
+            return symbolTableRoot->LookupSym("float")->getType();
+            
+        // if LHS is greater, return it
+        else if (_expr1->getType()->getSize() > _expr2->getType()->getSize())
+            return _expr1->getType();
+        
+        // return largest
+        else
             return _expr2->getType();
     }
 private:

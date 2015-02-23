@@ -23,11 +23,6 @@ public:
         return "VAR: " + _type->toString() + " " + _identifier->toString();
     }
     
-    cDeclNode* getType()
-    {
-        return _type->getType();
-    }
-    
     int getSize()
     {
         return _type->getType()->getSize();
