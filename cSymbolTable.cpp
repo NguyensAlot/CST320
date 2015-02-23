@@ -21,14 +21,20 @@ cSymbolTable::cSymbolTable()
     integer->setType(new cBaseDecl("int", 4, false));
     floating->setType(new cBaseDecl("float", 8, true));
     
+    character->setIsType();
+    integer->setIsType();
+    floating->setIsType();
+    
     Insert(character);
     Insert(integer);
     Insert(floating);
 }
 
-void cSymbolTable::IncreaseScope()
+map<string,cSymbol*>* cSymbolTable::IncreaseScope()
 {
     mapList.push_front(new map<string, cSymbol*>());
+    
+    return mapList.front();
 }
         
 void cSymbolTable::DecreaseScope()
@@ -39,25 +45,31 @@ void cSymbolTable::DecreaseScope()
 //brings in symbol and inserts it into default map
 cSymbol* cSymbolTable::Insert(string symbolCharPointer)
 {
-    cSymbol* retVal = nullptr;
+    cSymbol* symbol = nullptr;
     map<string,cSymbol*>::iterator it = mapList.front()->find(symbolCharPointer);
     
     if (it == mapList.front()->end())
     {
-        retVal = new cSymbol(symbolCharPointer);
-        mapList.front()->insert(pair<string,cSymbol*>(symbolCharPointer,retVal));
+        symbol = new cSymbol(symbolCharPointer);
+        mapList.front()->insert(pair<string,cSymbol*>(symbolCharPointer,symbol));
     }
     
     else 
-    {
-        retVal = it->second;
-    }
-    return retVal;
+        symbol = it->second;
+        
+    return symbol;
 }
+
 cSymbol* cSymbolTable::Insert(cSymbol* csymbol)
 {
-    mapList.front()->insert(pair<string,cSymbol*>(csymbol->getmSymbol(),csymbol));
-
+    map<string,cSymbol*>::iterator it = mapList.front()->find(csymbol->getmSymbol());
+    
+    if (it == mapList.front()->end())
+        mapList.front()->insert(pair<string,cSymbol*>(csymbol->getmSymbol(), csymbol));
+        
+    else 
+        csymbol = it->second;
+        
     return csymbol;
 }
 
@@ -77,4 +89,14 @@ cSymbol* cSymbolTable::LookupSym(string symbol)
     
     //return nothing
     return nullptr;
+}
+
+cSymbol* cSymbolTable::SeachLocal(string symbol)
+{
+    map<string, cSymbol *>::const_iterator it = mapList.front()->find(symbol);
+    
+    if (it == mapList.front()->end())
+        return nullptr;
+    else
+        return it->second;
 }

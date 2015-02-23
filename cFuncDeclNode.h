@@ -41,8 +41,9 @@ public:
     
     string stringType()
     {
-        return "";
+        return _header->getTypeSymbol()->getmSymbol();
     }
+    
 private:
     cFuncHeader* _header;
     cDeclsNode* _decl;

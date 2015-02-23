@@ -46,19 +46,10 @@ whitespace          [' '\t\n]+
 {identifiers}               {  
                                 yylval.symbol = symbolTableRoot->LookupSym(yytext);
                                 
-                                if(yylval.symbol != nullptr)
-                                {
-                                    if (yylval.symbol->getType() != nullptr && 
-                                        yylval.symbol->getType()->IsType())
-                                    {
-                                        RETURN(TYPE_ID);
-                                    }
-                                }
-                                else
-                                {
-                                    yylval.symbol = new cSymbol(yytext);
-                                }
-                                
+                                if(yylval.symbol != nullptr && yylval.symbol->getIsType())
+                                    RETURN(TYPE_ID);
+                                    
+                                yylval.symbol = new cSymbol(yytext);
                                 RETURN(IDENTIFIER);
                             }
 {integer}                   {

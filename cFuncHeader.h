@@ -30,6 +30,12 @@ public:
             
         return strHolder;
     }
+    
+    cSymbol* getTypeSymbol()
+    {
+        return _prefix->getTypeSymbol();
+    }
+    
 private:
     cFuncPrefix* _prefix;
     cParamsSpec* _params;

@@ -12,29 +12,30 @@
 
 %union
     {
-        int                 int_val;
-        double              float_val;
-        cSymbol*            symbol;
-        cSymbolTable*       sym_table;
-        cAstNode*           ast_node;
-        cExprNode*          expr_node;
-        cStmtNode*          stmt_node;
-        cDeclNode*          decl_node;
-        cBlockNode*         block_node;
-        cPrintNode*         print_node;
-        cStmtsNode*         stmts_node;
-        cDeclsNode*         decls_node;
-        cVarRefExprNode*    var_node;
-        cVarPartNode*       var_p_node;
-        cParamNode*         param_node;
-        cParamsNode*        params_node;
-        cParamSpec*         param_spec;
-        cParamsSpec*        params_spec;
-        cFuncCall*          func_call;
-        cFuncHeader*        func_header;
-        cFuncPrefix*        func_prefix;
-        cArraySpec*         array_spec;
-        cArrayVal*          array_val;
+        int                     int_val;
+        double                  float_val;
+        cSymbol*                symbol;
+        cSymbolTable*           sym_table;
+        cAstNode*               ast_node;
+        cExprNode*              expr_node;
+        cStmtNode*              stmt_node;
+        cDeclNode*              decl_node;
+        cBlockNode*             block_node;
+        cPrintNode*             print_node;
+        cStmtsNode*             stmts_node;
+        cDeclsNode*             decls_node;
+        cVarRefExprNode*        var_node;
+        cVarPartNode*           var_p_node;
+        cParamNode*             param_node;
+        cParamsNode*            params_node;
+        cParamSpec*             param_spec;
+        cParamsSpec*            params_spec;
+        cFuncCall*              func_call;
+        cFuncHeader*            func_header;
+        cFuncPrefix*            func_prefix;
+        cArraySpec*             array_spec;
+        cArrayVal*              array_val;
+        map<string,cSymbol*>*   map_node;
     }
 
 %{
@@ -57,7 +58,7 @@
 
 %type <ast_node> program
 %type <stmt_node> block
-%type <sym_table> open
+%type <map_node> open
 %type <sym_table> close
 %type <decls_node> decls
 %type <decl_node> decl
@@ -99,8 +100,7 @@ block:  open decls stmts close  {
                                     $$ = new cBlockNode(nullptr, $2);
                                 }
 open:   '{'                     {
-                                    symbolTableRoot->IncreaseScope();
-                                    $$ = NULL; //change this
+                                    $$ = symbolTableRoot->IncreaseScope();
                                 }
 close:  '}'                     {
                                     symbolTableRoot->DecreaseScope();
@@ -131,23 +131,29 @@ decl:       var_decl ';'        {
         |   error ';'           {}
 var_decl:   TYPE_ID IDENTIFIER 
                                 {
-                                    if (symbolTableRoot->LookupSym($2->getmSymbol()) == $2)
-                                        semantic_error("Symbol " + $2->getmSymbol() + " already defined in current scope");
-                                    else
+                                    if (symbolTableRoot->SeachLocal($2->getmSymbol()) == nullptr)
                                     {
-                                        $2 = symbolTableRoot->Insert($2->getmSymbol());     
+                                        $2 = symbolTableRoot->Insert($2);     
                                         $$ = new cVarDeclNode($1, $2);
-                                        $2->setType($$);
+                                        $2->setType($1->getType());
+                                        $2->setDeclared();
                                     }
+                                    else
+                                        semantic_error("Symbol " + $2->getmSymbol() + " already defined in current scope");
                                 }
 array_decl: ARRAY TYPE_ID IDENTIFIER arrayspec
                                 {
-                                    $3 = symbolTableRoot->Insert($3->getmSymbol());
+                                    $3 = symbolTableRoot->Insert($3);
+                                    $3->setDeclared();
+                                    $3->setIsType();
                                     $$ = new cArrayDecl($2, $3, $4);
-                                    $3->setType($$);
+                                    $3->setType($2->getType());
                                 }
 struct_decl:  STRUCT open decls close IDENTIFIER    
                                 {
+                                    $5 = symbolTableRoot->Insert($5);
+                                    $5->setDeclared();
+                                    $5->setIsType();
                                     $$ = new cStructDeclNode($2, $3, $5);    
                                     $5->setType($$);
                                 }
@@ -163,6 +169,7 @@ func_decl:  func_header ';'
                                 }
         |   func_header  '{' stmts '}'
                                 {
+                                    
                                     $$ = new cFuncDeclNode($1, nullptr, $3);
                                     symbolTableRoot->DecreaseScope();
                                 }
@@ -175,6 +182,7 @@ func_header: func_prefix paramsspec ')'
                                 }
 func_prefix: TYPE_ID IDENTIFIER '('
                                 {
+                                    $2 = symbolTableRoot->Insert($2);
                                     symbolTableRoot->IncreaseScope();
                                     $$ = new cFuncPrefix($1, $2);
                                 }
@@ -262,17 +270,19 @@ func_call:  IDENTIFIER '(' params ')'
 varref:   varref '.' varpart    {
                                     $$ = $1;
                                     $$->addNode($3);
+                                    if (symbolTableRoot->LookupSym($3->getSym()->getmSymbol()) == nullptr)
+                                        semantic_error("Symbol " + $3->getSym()->getmSymbol() + " not defined");
                                 }
         | varpart               {
                                     $$ = new cVarRefExprNode();
                                     $$->addNode($1);
+                                    if (symbolTableRoot->LookupSym($1->getSym()->getmSymbol()) == nullptr)
+                                        semantic_error("Symbol " + $1->getSym()->getmSymbol() + " not defined");
                                 }
 
 varpart:  IDENTIFIER arrayval   {
-                                    if (symbolTableRoot->LookupSym($1->getmSymbol()) == nullptr)
-                                        semantic_error("Symbol " + $1->getmSymbol() + " not defined");
-                                    else 
-                                        $$ = new cVarPartNode($1, $2);
+                                    $1 = symbolTableRoot->Insert($1);
+                                    $$ = new cVarPartNode($1, $2);
                                 }
 
 lval:     varref                {

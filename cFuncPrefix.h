@@ -18,10 +18,17 @@ public:
         _typeID = typeID;
         _identifier = identifier;
     }
+    
     string toString()
     {
         return _identifier->toString();
     }
+    
+    cSymbol* getTypeSymbol()
+    {
+        return _typeID;
+    }
+    
 private:
     cSymbol* _typeID;
     cSymbol* _identifier;

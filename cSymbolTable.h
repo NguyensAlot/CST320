@@ -18,11 +18,13 @@ class cSymbolTable
 {
 public:
     cSymbolTable();
-    void IncreaseScope();
+    map<string,cSymbol*>* IncreaseScope();
     void DecreaseScope();
     cSymbol* Insert(string symbol);
     cSymbol* Insert(cSymbol* symbol);
     cSymbol* LookupSym(string symbol);
+    cSymbol* SeachLocal(string symbol);
+    
 private:
     list<map<string, cSymbol*>*> mapList;
 };

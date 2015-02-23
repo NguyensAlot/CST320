@@ -30,7 +30,7 @@ public:
     
     string stringType()
     {
-        return "array Decl";
+        return _type->getmSymbol();
     }
 private:
     cSymbol* _type;

@@ -5,7 +5,6 @@
  * Description: Takes care of struct declaration
  * **************************************************/
 #pragma once
-#include "cDeclNode.h"
 #include "cDeclsNode.h"
 #include "cSymbol.h"
 
@@ -14,18 +13,16 @@ using namespace std;
 class cStructDeclNode : public cDeclNode
 {
 public:
-    cStructDeclNode(cSymbolTable* symTable, cDeclsNode* decls, cSymbol* identifier)
+    cStructDeclNode(map<string, cSymbol*>* symTable, cDeclsNode* decls, cSymbol* identifier)
     {
         _symTable = symTable;
         _decls = decls;
         _identifier = identifier;
     }
+    
     string toString()
     {
-        string returnValue;
-        returnValue += _decls->toString() + " " + _identifier->toString();
-        
-        return "STRUCT: " + returnValue;
+        return "STRUCT: " + _decls->toString() + " " + _identifier->toString();
     }
     
     int getSize()
@@ -35,10 +32,27 @@ public:
     
     string stringType()
     {
-        return "struct decl";
+        return _identifier->getmSymbol();
     }
+    
+        cSymbol* Find(string symbol)
+    {
+        cSymbol* sym = nullptr;
+        
+        if(_symTable != nullptr)
+        {
+            map<string,cSymbol*>::iterator it = _symTable->find(symbol);
+            
+            if(it != _symTable->end())
+            {
+                sym = it->second;
+            }
+        }
+        return sym;
+    }
+    
 private:
-    cSymbolTable* _symTable;
+    map<string, cSymbol*>* _symTable;
     cDeclsNode* _decls;
     cSymbol* _identifier;
 };

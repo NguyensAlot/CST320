@@ -34,6 +34,17 @@ public:
     {
         return _var->getType();
     }
+    
+    void setSym(cSymbol* var)
+    {
+        _var = var;
+    }
+    
+    cSymbol* getSym()
+    {
+        return _var;
+    }
+    
 private:
     cSymbol* _var;
     cArrayVal* _array;

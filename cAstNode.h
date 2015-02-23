@@ -8,8 +8,12 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <map>
+#include <unordered_map>
 
 using namespace std;
+
+void semantic_error(string msg);
 
 class cAstNode
 {
