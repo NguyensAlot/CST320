@@ -1,14 +1,16 @@
 %{
 // lang lexer definition file
 //
-// Author: Anthony Nguyen anthony.nguyen@oit.edu
-//
-// Illustration showing how to use {} to control scope
+// Author: Alexander Tappin, Anthony Nguyen
+// Primary: Alexander Tappin
+// alexander.tappin@oit.edu, anthony.nguyen@oit.edu
 
+//#include "tokens.h"
 #include "cSymbol.h"
 #include "cSymbolTable.h"
 #include "lex.h"
 #include "langparse.h"
+
 
 #define RETURN(a) return Return(a);
 static int Return(int val);
@@ -20,49 +22,65 @@ static int Return(int val);
 %option nounput
 %option yylineno
 
-
     /* definitions go here. period is an example. */
 
-operators       [+\-*/%<!=]
-identifier      [a-zA-Z][a-zA-Z0-9_]*
-integer         -?[0-9]+
-punctuation     [{}()\[\];,.]
-float           -?[0-9]+[\.][0-9]+
-whitespace      [' '\t\n]+
-comment         "//".*$
-junk            .
-
+identifiers         [a-zA-Z][a-zA-Z0-9_]*
+integer             [-]?[0-9]+
+float               [-]?[0-9]+\.[0-9]+
+punctuation         [{}()\[\];,\.]
+operators           =|"|"|[*\-+\/%]
+comments            "//".*$
+whitespace          [' '\t\n]+
 %%
-
-    // token definitions go here. "if" is an example.
-
+    // token definitions go here.
+"array"                     RETURN(ARRAY);
 "if"                        RETURN(IF);
-"then"                      RETURN(THEN);
 "else"                      RETURN(ELSE);
-"for"                       RETURN(FOR);
 "while"                     RETURN(WHILE);
 "print"                     RETURN(PRINT);
 "scan"                      RETURN(SCAN);
-"int"                       RETURN(INT_VAL);
-"float"                     RETURN(FLOAT);
 "struct"                    RETURN(STRUCT);
-{comment}                   //no comments
-{integer}                   RETURN(INT_VAL);
-{float}                     RETURN(FLOAT_VAL);
+"return"                    RETURN(RETURN);
 {operators}                 RETURN(yytext[0]);
 {punctuation}               RETURN(yytext[0]);
-{identifier}                {  
-                                yylval.symbol = symbolTableRoot->Insert(yytext);
-                                return (IDENTIFIER);
+{identifiers}               {  
+                                yylval.symbol = symbolTableRoot->LookupSym(yytext);
+                                
+                                if(yylval.symbol != nullptr)
+                                {
+                                    if (yylval.symbol->getType() != nullptr && 
+                                        yylval.symbol->getType()->IsType())
+                                    {
+                                        RETURN(TYPE_ID);
+                                    }
+                                }
+                                else
+                                {
+                                    yylval.symbol = new cSymbol(yytext);
+                                }
+                                
+                                RETURN(IDENTIFIER);
                             }
+{integer}                   {
+                                yylval.int_val = atoi(yytext);
+                                RETURN(INT_VAL);
+                            }
+{float}                     {
+                                yylval.float_val = atof(yytext);
+                                RETURN(FLOAT_VAL);
+                            }
+
+
+{comments}                  //no comments
 {whitespace}                //no whitespace
 .                           RETURN(JUNK_TOKEN);
 %%
 
-// This function allows us to do extra processing on each token
+    // This function allows us to do extra processing on each token
 static int Return(int val)
 {
-//    printf("Scanned '%s': %d\n", yytext, val);
+    //printf("Scanned '%s': %d\n", yytext, val);
     return val;
 }
+
 

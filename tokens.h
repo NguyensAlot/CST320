@@ -17,7 +17,7 @@
 #define IDENTIFIER 1013
 #define OPERATOR 1014
 #define FOR 1015
-#define END 1016
+#define ARRAY 1016
 #define JUNK_TOKEN 2000
 
 #endif

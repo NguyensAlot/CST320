@@ -1,26 +1,6 @@
-.()  	{}[] ,;
-if
-then
-else
-for
-while
-print
-scan
-int
-float
-char
-struct
-return
-123
-123.456
-stuff
-===&&||  	+-/*%==
-// this is a comment
-::@#$			// should get JUNK for each char
-iff			// should be IDENTIFIER (not 'if' followed by 'f')
-123print		// should be INTEGER followed by PRINT
-123.			// should be INTEGER followed by .
-123.xyz			// should be INTEGER . IDENTIFIER
+{
+   int aaa;
+   char aaa;
 
-
-
+   print(bbb);
+}

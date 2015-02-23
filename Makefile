@@ -32,3 +32,4 @@ langparse.c: lang.y
 
 lang: $(OBJS)
 	g++ $(OBJS) -o lang
+
