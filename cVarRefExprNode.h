@@ -9,6 +9,8 @@
 #include "cVarPartNode.h"
 #include "cStructDeclNode.h"
 
+extern cSymbolTable* symbolTableRoot;
+
 using namespace std;
 
 class cVarRefExprNode : public cExprNode
@@ -33,18 +35,21 @@ public:
     void addNode(cVarPartNode* var)
     {
         // add to the back of the list
-        if (!isValid(var))
+        error = isValid(var);
+        if (!error)
             _varList.push_back(var);
     }
     
     cDeclNode* getType()
     {
-        return (*_varList.rbegin())->getType();
+        if (*_varList.rbegin() != nullptr)
+            return (*_varList.rbegin())->getType();
+        return nullptr;
     }
     
     bool isValid(cVarPartNode* symbol)
     {
-        // check size
+        // check size of list
         if(_varList.size() == 0)
         {   
             // check if declared
@@ -62,7 +67,7 @@ public:
             if (decl != nullptr)
             {
                 // find cSymbol in structs
-                cSymbol * sym = decl->Find(symbol->getSym()->getmSymbol());
+                cSymbol* sym = decl->Find(symbol->getSym()->getmSymbol());
                 
                 // if cSymbol found, valid
                 if(sym != nullptr)
@@ -74,9 +79,7 @@ public:
                 else
                 {
                     string msg = symbol->getSym()->getmSymbol() + " is not a field of ";
-                    
                     semantic_error(msg + ErrorMsg());
-                    
                     return true;
                 }
             }
@@ -107,6 +110,27 @@ public:
             counter--;
         }
         return msg;
+        
+/*                string msg;
+        list<cVarPartNode*>::const_iterator it = _varList.begin();
+        int counter = _varList.size() - 1;
+        
+        // Iterate through list of parts displaying them
+        while (it != _varList.end())
+        {
+            msg += (*it)->getSym()->getmSymbol(); // Add to the error message
+            
+            it++; // Move iterator to the next VarPart
+            
+            // If the iterator has not displayed the last Varpart
+            // add a '.' to differentiate between the different parts
+            if (counter != 0)
+                msg += '.';
+                
+            counter--;
+        }
+    
+        return msg;*/
     }
     
 private:

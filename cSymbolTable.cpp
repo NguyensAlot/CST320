@@ -65,7 +65,12 @@ cSymbol* cSymbolTable::Insert(cSymbol* csymbol)
     map<string,cSymbol*>::iterator it = mapList.front()->find(csymbol->getmSymbol());
     
     if (it == mapList.front()->end())
-        mapList.front()->insert(pair<string,cSymbol*>(csymbol->getmSymbol(), csymbol));
+    {
+        if(LookupSym(csymbol->getmSymbol()) == csymbol)
+            Insert(csymbol->getmSymbol());
+        else
+            mapList.front()->insert(pair<string,cSymbol*>(csymbol->getmSymbol(), csymbol));
+    }
         
     else 
         csymbol = it->second;

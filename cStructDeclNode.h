@@ -25,9 +25,14 @@ public:
         return "STRUCT: " + _decls->toString() + " " + _identifier->toString();
     }
     
+    bool IsStruct()
+    {
+        return true;
+    }
+    
     int getSize()
     {
-        return 0;
+        return 100;
     }
     
     string stringType()

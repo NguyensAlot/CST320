@@ -246,11 +246,8 @@ stmt:       IF '(' expr ')' stmt
                                     $$ = new cScanNode($3);
                                 }
         |   lval '=' expr ';'   {
+                                    // error check in c'tor
                                     $$ = new cAssignNode($1, $3);
-                                    if($$->SemanticError())
-                                    {
-                                        semantic_error("Cannot assign " + $3->getType()->stringType() + " to " + $1->getType()->stringType());
-                                    }
                                 }
         |   func_call ';'       {
                                     $$ = $1;
@@ -268,16 +265,16 @@ func_call:  IDENTIFIER '(' params ')'
                                     $$ = new cFuncCall($1, $3);
                                 }
 varref:   varref '.' varpart    {
+                                    if ($1 == nullptr)
+                                        $$ = new cVarRefExprNode();
                                     $$ = $1;
                                     $$->addNode($3);
-                                    if (symbolTableRoot->LookupSym($3->getSym()->getmSymbol()) == nullptr)
-                                        semantic_error("Symbol " + $3->getSym()->getmSymbol() + " not defined");
+                                    if ($$->SemanticError());
                                 }
         | varpart               {
                                     $$ = new cVarRefExprNode();
                                     $$->addNode($1);
-                                    if (symbolTableRoot->LookupSym($1->getSym()->getmSymbol()) == nullptr)
-                                        semantic_error("Symbol " + $1->getSym()->getmSymbol() + " not defined");
+                                    if ($$->SemanticError());
                                 }
 
 varpart:  IDENTIFIER arrayval   {
