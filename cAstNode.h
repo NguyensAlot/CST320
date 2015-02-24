@@ -19,7 +19,7 @@ class cAstNode
 {
 public:
     virtual string toString() = 0;
-    virtual bool SemanticError() { return false; }
+    virtual bool SemanticError() { return error; }
     
 protected:
     bool error = false;

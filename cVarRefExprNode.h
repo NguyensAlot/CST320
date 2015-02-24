@@ -42,9 +42,7 @@ public:
     
     cDeclNode* getType()
     {
-        if (*_varList.rbegin() != nullptr)
-            return (*_varList.rbegin())->getType();
-        return nullptr;
+        return (*_varList.rbegin())->getType();
     }
     
     bool isValid(cVarPartNode* symbol)
@@ -110,27 +108,6 @@ public:
             counter--;
         }
         return msg;
-        
-/*                string msg;
-        list<cVarPartNode*>::const_iterator it = _varList.begin();
-        int counter = _varList.size() - 1;
-        
-        // Iterate through list of parts displaying them
-        while (it != _varList.end())
-        {
-            msg += (*it)->getSym()->getmSymbol(); // Add to the error message
-            
-            it++; // Move iterator to the next VarPart
-            
-            // If the iterator has not displayed the last Varpart
-            // add a '.' to differentiate between the different parts
-            if (counter != 0)
-                msg += '.';
-                
-            counter--;
-        }
-    
-        return msg;*/
     }
     
 private:

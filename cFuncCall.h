@@ -10,7 +10,7 @@
 #include "cStmtNode.h"
 #include "cSymbol.h"
 
-class cFuncCall : public cStmtNode
+class cFuncCall : public cStmtNode, public cExprNode
 {
 public:
     cFuncCall(cSymbol* identifier, cParamsNode* params)
@@ -18,10 +18,17 @@ public:
         _identifier = identifier;
         _params = params;
     }
+    
     string toString()
     {
         return "(FUNC CALL: " + _identifier->toString() + _params->toString() + ")";
     }
+    
+    cDeclNode* getType()
+    {
+        return _identifier->getType();
+    }
+    
 private:
     cSymbol* _identifier;
     cParamsNode* _params;

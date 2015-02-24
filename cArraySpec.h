@@ -27,6 +27,7 @@ public:
     {
         _intList.push_back(value);
     }
+
 private:
     list<int> _intList;
     

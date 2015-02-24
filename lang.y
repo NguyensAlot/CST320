@@ -40,7 +40,7 @@
 
 %{
     int yyerror(const char *msg);
-    void semantic_error(std::string msg);
+    //void semantic_error(std::string msg);
     cAstNode *yyast_root;
 %}
 
@@ -48,8 +48,8 @@
 %token <symbol>     TYPE_ID
 %token <int_val>    INT_VAL
 %token <float_val>  FLOAT_VAL
+%token <symbol>     ARRAY
 
-%token  ARRAY
 %token  SCAN PRINT
 %token  WHILE IF ELSE 
 %token  STRUCT
@@ -131,15 +131,18 @@ decl:       var_decl ';'        {
         |   error ';'           {}
 var_decl:   TYPE_ID IDENTIFIER 
                                 {
-                                    if (symbolTableRoot->SeachLocal($2->getmSymbol()) == nullptr)
+                                    if (symbolTableRoot->SearchLocal($2->getmSymbol()) == nullptr)
                                     {
-                                        $2 = symbolTableRoot->Insert($2);     
-                                        $$ = new cVarDeclNode($1, $2);
+                                        $2 = symbolTableRoot->Insert($2);   
                                         $2->setType($1->getType());
                                         $2->setDeclared();
+                                        $$ = new cVarDeclNode($1, $2);
                                     }
                                     else
+                                    {
                                         semantic_error("Symbol " + $2->getmSymbol() + " already defined in current scope");
+                                        YYERROR;
+                                    }   
                                 }
 array_decl: ARRAY TYPE_ID IDENTIFIER arrayspec
                                 {
@@ -147,7 +150,7 @@ array_decl: ARRAY TYPE_ID IDENTIFIER arrayspec
                                     $3->setDeclared();
                                     $3->setIsType();
                                     $$ = new cArrayDecl($2, $3, $4);
-                                    $3->setType($2->getType());
+                                    $3->setType($$);
                                 }
 struct_decl:  STRUCT open decls close IDENTIFIER    
                                 {
@@ -183,8 +186,9 @@ func_header: func_prefix paramsspec ')'
 func_prefix: TYPE_ID IDENTIFIER '('
                                 {
                                     $2 = symbolTableRoot->Insert($2);
-                                    symbolTableRoot->IncreaseScope();
+                                    $2->setType($1->getType());
                                     $$ = new cFuncPrefix($1, $2);
+                                    symbolTableRoot->IncreaseScope();
                                 }
 paramsspec:     
             paramsspec',' paramspec 
@@ -247,7 +251,7 @@ stmt:       IF '(' expr ')' stmt
                                 }
         |   lval '=' expr ';'   {
                                     // error check in c'tor
-                                    $$ = new cAssignNode($1, $3);
+                                    $$ = new cAssignNode((cVarRefExprNode*)$1, $3);
                                 }
         |   func_call ';'       {
                                     $$ = $1;
@@ -266,19 +270,21 @@ func_call:  IDENTIFIER '(' params ')'
                                 }
 varref:   varref '.' varpart    {
                                     if ($1 == nullptr)
-                                        $$ = new cVarRefExprNode();
+                                        $1 = new cVarRefExprNode();
                                     $$ = $1;
                                     $$->addNode($3);
-                                    if ($$->SemanticError());
+                                    if ($$->SemanticError())
+                                        YYERROR;
                                 }
         | varpart               {
                                     $$ = new cVarRefExprNode();
                                     $$->addNode($1);
-                                    if ($$->SemanticError());
+                                    if ($$->SemanticError())
+                                        YYERROR;
                                 }
 
 varpart:  IDENTIFIER arrayval   {
-                                    $1 = symbolTableRoot->Insert($1);
+                                    //$1 = symbolTableRoot->Insert($1);
                                     $$ = new cVarPartNode($1, $2);
                                 }
 
@@ -296,14 +302,14 @@ arrayval: arrayval '[' expr ']' {
                                 }
 
 params:     params ',' param    {
-                                    if ($1 == nullptr)
-                                        $1 = new cParamsNode();
                                     $$ = $1;
-                                    $$->addNode($3);
+                                    if($3 != nullptr)
+                                        $$->addNode($3);
                                 }
         |   param               {
                                     $$ = new cParamsNode();
-                                    $$->addNode($1);
+                                    if($1 != nullptr)
+                                        $$->addNode($1);
                                 }
 
 param:      expr                {

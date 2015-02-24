@@ -1,6 +1,7 @@
 /*****************************************************
  * Class: cArraySpec
  * Author: Anthony Nguyen
+ * 
  * Description: Takes care of arrays
  * **************************************************/
 #pragma once
@@ -23,14 +24,29 @@ public:
         return "ARRAY: " + _type->toString() + " " + _identifier->toString() + " " + _val->toString();
     }
     
+    bool IsArray()
+    {
+        return true;
+    }
+    
+    cDeclNode* getBaseType()
+    {
+        return _type->getType();
+    }
+    
+    cDeclNode* getType()
+    {
+        return _identifier->getType();
+    }
+    
     int getSize()
     {
-        return 0;
+        return -10;
     }
     
     string stringType()
     {
-        return _type->getmSymbol();
+        return _identifier->getmSymbol();
     }
 private:
     cSymbol* _type;

@@ -11,7 +11,7 @@
  
 using namespace std;
 
-class cFuncHeader : public cAstNode
+class cFuncHeader
 {
 public:
     cFuncHeader(cFuncPrefix* prefix, cParamsSpec* params = nullptr)

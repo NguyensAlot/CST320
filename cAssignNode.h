@@ -22,7 +22,10 @@ public:
         
         error = check();
         if (error)
+        {
             semantic_error("Cannot assign " + _expr->getType()->stringType() + " to " + _varRef->getType()->stringType());
+            error = false;
+        }
     }
     string toString()
     {
@@ -31,27 +34,32 @@ public:
     
     bool check()
     {
-        //error = false;
-        // if nullptr, do nothing
-        if (_varRef->getType() == nullptr || _expr->getType() == nullptr);
-        else if (_varRef->getType() != _expr->getType())
+        //if (_varRef->getType() == nullptr || _expr->getType() == nullptr);
+        if (_varRef->getType() != _expr->getType())
         {
-            // if both are structs
-            if (_varRef->getType()->IsStruct() && _expr->getType()->IsStruct())
-                // if structs are name different
-                if (_varRef->getType()->stringType() != _expr->getType()->stringType())
-                    //error = true;
-                    return true;
-            // anything non-struct can't be assigned to a struct
-            if (_varRef->getType()->IsStruct() && !_expr->getType()->IsStruct())
-                //error = true;
+            // char accepts nothing, but itself
+            if(_varRef->getType()->IsChar())
                 return true;
-            // right hand side can't be larger size than left hand side
-            if (_varRef->getType()->getSize() < _expr->getType()->getSize())
-                //error = true;
+            // int doesnt accept float or struct
+            if(_varRef->getType()->IsInt() && (_expr->getType()->IsFloat() || _expr->getType()->IsStruct()))
+                return true;
+            // float doesnt accept a struct
+            if(_varRef->getType()->IsFloat() && _expr->getType()->IsStruct())
+                return true;
+            // struct does not accept anything else
+            if(_varRef->getType()->IsStruct() && (_expr->getType()->IsInt() || _expr->getType()->IsFloat() || _expr->getType()->IsChar()))
+                return true;
+            // both are structs, but different names
+            if(_varRef->getType()->IsStruct() && _expr->getType()->IsStruct())
+                if(_varRef->getType()->stringType() != _expr->getType()->stringType())
+                    return true;
+            // Only one of the two are arrays
+            if((!_varRef->getType()->IsArray() && _expr->getType()->IsArray()) || (_varRef->getType()->IsArray() && !_expr->getType()->IsArray()))
+                return true;
+            // both are arrays, but different names
+            if((_varRef->getType()->IsArray() && _expr->getType()->IsArray()) && (_varRef->getType()->stringType() != _expr->getType()->stringType()))
                 return true;
         }
-        //return error;
         return false;
     }
 private:

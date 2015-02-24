@@ -10,7 +10,7 @@
  
 using namespace std;
  
-class cFuncPrefix : public cAstNode
+class cFuncPrefix
 {
 public:
     cFuncPrefix(cSymbol* typeID, cSymbol* identifier)

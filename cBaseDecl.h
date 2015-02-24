@@ -13,20 +13,21 @@ using namespace std;
 class cBaseDecl : public cDeclNode
 {
 public:
-    cBaseDecl(string typeName, int size, bool isFloat)
+    cBaseDecl(string typeName, int size, bool isFloat, bool isChar)
     {
         _typeName = typeName;
         _size = size;
         _isFloat = isFloat;
+        _isChar = isChar;   
     }
     
     bool IsInt()    { return !_isFloat; }
     bool IsFloat()  { return _isFloat; }
     bool IsType()   { return true; }
-    
+    bool IsChar()   { return _isChar; }
     string toString()
     {
-        return "";
+        return "poop is compilers";
     }
 
     int getSize()
@@ -42,6 +43,7 @@ protected:
     string _typeName;
     int _size;
     bool _isFloat;
+    bool _isChar;
 };
 
 

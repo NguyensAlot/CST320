@@ -13,5 +13,6 @@ using namespace std;
 class cExprNode : public cAstNode
 {
 public:
+    virtual string toString() = 0;
     virtual cDeclNode* getType() = 0;
 };

@@ -8,6 +8,7 @@
 #include "cExprNode.h"
 #include "cSymbol.h"
 #include "cArrayVal.h"
+#include "cArrayDecl.h"
 
 using namespace std;
 
@@ -30,9 +31,19 @@ public:
         return strHolder;
     }
     
+    bool isIndex()
+    {
+        if (_array == nullptr)
+            return false; 
+        return true;
+    }
+    
     cDeclNode* getType()
     {
-        return _var->getType();
+        if (isIndex())
+            return dynamic_cast<cArrayDecl*>(_var->getType())->getBaseType();
+        else
+            return _var->getType();
     }
     
     void setSym(cSymbol* var)

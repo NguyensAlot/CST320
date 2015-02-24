@@ -36,7 +36,7 @@ public:
     
     int getSize()
     {
-        return 0;
+        return _header->getTypeSymbol()->getType()->getSize();
     }
     
     string stringType()

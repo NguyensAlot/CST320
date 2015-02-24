@@ -30,7 +30,7 @@ float               [-]?[0-9]+\.[0-9]+
 punctuation         [{}()\[\];,\.]
 operators           =|"|"|[*\-+\/%]
 comments            "//".*$
-whitespace          [' '\t\n]+
+whitespace          [' '\t\n]*
 %%
     // token definitions go here.
 "array"                     RETURN(ARRAY);
@@ -41,15 +41,17 @@ whitespace          [' '\t\n]+
 "scan"                      RETURN(SCAN);
 "struct"                    RETURN(STRUCT);
 "return"                    RETURN(RETURN);
-{operators}                 RETURN(yytext[0]);
-{punctuation}               RETURN(yytext[0]);
+{comments}                  //no comments
 {identifiers}               {  
                                 yylval.symbol = symbolTableRoot->LookupSym(yytext);
                                 
-                                if(yylval.symbol != nullptr && yylval.symbol->getIsType())
-                                    RETURN(TYPE_ID);
-                                    
-                                yylval.symbol = new cSymbol(yytext);
+                                if(yylval.symbol != nullptr)
+                                {
+                                    if(yylval.symbol->getIsType())
+                                       RETURN(TYPE_ID);
+                                }
+                                else
+                                    yylval.symbol = new cSymbol(yytext);
                                 RETURN(IDENTIFIER);
                             }
 {integer}                   {
@@ -62,7 +64,9 @@ whitespace          [' '\t\n]+
                             }
 
 
-{comments}                  //no comments
+
+{operators}                 RETURN(yytext[0]);
+{punctuation}               RETURN(yytext[0]);
 {whitespace}                //no whitespace
 .                           RETURN(JUNK_TOKEN);
 %%

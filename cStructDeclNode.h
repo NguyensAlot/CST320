@@ -32,7 +32,17 @@ public:
     
     int getSize()
     {
-        return 100;
+        return addSize();
+    }
+    
+    int addSize()
+    {
+        int count = 0;
+        
+        for (map<string,cSymbol*>::iterator it = _symTable->begin(); it != _symTable->end(); it++)
+            count += it->second->getType()->getSize();
+            
+        return count;
     }
     
     string stringType()
@@ -40,7 +50,7 @@ public:
         return _identifier->getmSymbol();
     }
     
-        cSymbol* Find(string symbol)
+    cSymbol* Find(string symbol)
     {
         cSymbol* sym = nullptr;
         

@@ -9,6 +9,8 @@
 
 using namespace std;
 
+extern cSymbolTable* symbolTableRoot;
+
 class cBinaryExprNode : public cExprNode
 {
 public:

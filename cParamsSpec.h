@@ -12,6 +12,7 @@ class cParamsSpec : public cStmtNode
 {
 public:
     cParamsSpec() {}
+    
     string toString()
     {
         string strHolder;
@@ -22,6 +23,7 @@ public:
 
         return "(PARAMS:" + strHolder + ")\n";
     }
+    
     void addNode(cParamSpec* param)
     {
         // add to the back of the list

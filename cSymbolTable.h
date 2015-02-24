@@ -23,7 +23,7 @@ public:
     cSymbol* Insert(string symbol);
     cSymbol* Insert(cSymbol* symbol);
     cSymbol* LookupSym(string symbol);
-    cSymbol* SeachLocal(string symbol);
+    cSymbol* SearchLocal(string symbol);
     
 private:
     list<map<string, cSymbol*>*> mapList;
