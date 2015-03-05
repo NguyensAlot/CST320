@@ -1,0 +1,31 @@
+BLOCK: size: 32
+{
+DECLS:
+{
+STRUCT: DECLS:
+{
+VAR: sym: int 2 sym: a 4 size: 4 offset: 0
+VAR: sym: char 1 sym: b 5 size: 1 offset: 4
+}
+ sym: struct_1 6 size: 5
+STRUCT: DECLS:
+{
+VAR: sym: int 2 sym: c 7 size: 4 offset: 0
+VAR: sym: char 1 sym: b 8 size: 1 offset: 4
+VAR: sym: struct_1 6 sym: d 9 size: 5 offset: 8
+}
+ sym: struct_2 10 size: 13
+VAR: sym: int 2 sym: dd 11 size: 4 offset: 0
+VAR: sym: struct_1 6 sym: aa 12 size: 5 offset: 4
+VAR: sym: struct_2 10 sym: bb 13 size: 13 offset: 12
+VAR: sym: int 2 sym: cc 14 size: 4 offset: 28
+}
+STMTS:
+{
+(ASSIGN: (VarRef: sym: cc 14 size: 4 offset: 28) = (VarRef: sym: aa 12 (VarRef: sym: b 5) size: 1 offset: 8))
+(ASSIGN: (VarRef: sym: aa 12 (VarRef: sym: a 4) size: 4 offset: 4) = (VarRef: sym: cc 14 size: 4 offset: 28))
+(ASSIGN: (VarRef: sym: bb 13 (VarRef: sym: d 9 (VarRef: sym: a 4)) size: 4 offset: 20) = (VarRef: sym: aa 12 (VarRef: sym: b 5) size: 1 offset: 8))
+(ASSIGN: (VarRef: sym: aa 12 (VarRef: sym: b 5) size: 1 offset: 8) = (VarRef: sym: bb 13 (VarRef: sym: d 9 (VarRef: sym: b 5)) size: 1 offset: 24))
+}
+}
+

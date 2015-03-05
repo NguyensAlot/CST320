@@ -1,0 +1,28 @@
+BLOCK: size: 32
+{
+DECLS:
+{
+STRUCT: DECLS:
+{
+VAR: sym: char 1 sym: aa 4 size: 1 offset: 0
+VAR: sym: int 2 sym: bb 5 size: 4 offset: 4
+VAR: sym: char 1 sym: cc 6 size: 1 offset: 8
+VAR: sym: float 3 sym: dd 7 size: 8 offset: 12
+VAR: sym: char 1 sym: ee 8 size: 1 offset: 20
+}
+ sym: s1 9 size: 21
+VAR: sym: s1 9 sym: aa 10 size: 21 offset: 0
+STRUCT: DECLS:
+{
+VAR: sym: int 2 sym: aa 11 size: 4 offset: 0
+VAR: sym: int 2 sym: bb 12 size: 4 offset: 4
+}
+ sym: s2 13 size: 8
+VAR: sym: s2 13 sym: bb 14 size: 8 offset: 24
+}
+STMTS:
+{
+PRINT: (EXPR: 1)
+}
+}
+
