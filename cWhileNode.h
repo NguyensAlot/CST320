@@ -31,7 +31,28 @@ class cWhileNode : public cStmtNode
         result += "\n)";
         return result;
     }
-
+    
+    int Computeoffsets(int base)
+    {
+        mExpr->Computeoffsets(base);
+        mStmt->Computeoffsets(base);
+        
+        return base;
+    }
+    
+    void GenerateCode()
+    {
+        EmitString("while (");
+        
+        mExpr->GenerateCode();
+        
+        EmitString(")\n{\n");
+        
+        mStmt->GenerateCode();
+        
+        EmitString("\n}");
+    }
+    
   protected:
     cExprNode *mExpr;       // conditional expression
     cStmtNode *mStmt;       // statement to execute while true

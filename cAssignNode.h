@@ -41,6 +41,16 @@ class cAssignNode : public cStmtNode
         return result;
     }
 
+    void GenerateCode()
+    {
+        if(mLval != nullptr)
+            mLval->GenerateCode();
+        EmitString(" = ");
+        if(mExpr != nullptr)
+            mExpr->GenerateCode();
+        EmitString(";\n");
+    }
+    
     virtual int Computeoffsets(int base)
     {
         // make calls to Computeoffsets to recursively return values

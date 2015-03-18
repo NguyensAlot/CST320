@@ -68,7 +68,7 @@ class cVarPartNode : public cAstNode
         return mDecl->GetOffset();
     }
     
-    //
+    
     int GetFieldOffset()
     {
         return mFieldDecl->GetOffset();

@@ -121,6 +121,19 @@ class cVarRefNode : public cExprNode
         return base;
     }
 
+
+    void GenerateCode()
+    {
+        
+        if (mList->back()->GetDecl()->IsInt())
+        {
+            EmitString("(*(int *)(&Memory[(Frame_Pointer + " + std::to_string(mBase) + ")]))");
+        }
+        else if(mList->back()->GetDecl()->IsFloat())
+        {
+            EmitString("(*(double *)(&Memory[(Frame_Pointer + " + std::to_string(mBase) + ")]))");
+        }
+    }
   protected:
     std::string mName;
     list<cVarPartNode *> *mList;

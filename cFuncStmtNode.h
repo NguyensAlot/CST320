@@ -20,7 +20,13 @@ class cFuncStmtNode : public cStmtNode
     {
         mCall = call;
     }
-
+  virtual void GenerateCode()
+    {
+        if (mCall != nullptr)
+        {
+            mCall->GenerateCode();
+        }
+    }
     virtual std::string toString()
     {
         return mCall->toString();

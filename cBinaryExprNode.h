@@ -19,7 +19,8 @@ class cBinaryExprNode : public cExprNode
     cBinaryExprNode(cExprNode *left, char op, cExprNode *right) : cExprNode()
     {
         mLeftExpr = left;
-        mOperator = op;
+        mOperator[0] = op;
+        mOperator[1] = '\0';
         mRightExpr = right;
     }
 
@@ -46,6 +47,13 @@ class cBinaryExprNode : public cExprNode
         return result;
     }
 
+    void GenerateCode()
+    {
+        mLeftExpr->GenerateCode();
+        EmitString(mOperator);
+        mRightExpr->GenerateCode();
+    }
+    
     virtual int Computeoffsets(int base)
     {
         // make calls to Computeoffsets to recursively return values
@@ -58,6 +66,6 @@ class cBinaryExprNode : public cExprNode
   protected:
     cExprNode *mLeftExpr;       // left expression
     cExprNode *mRightExpr;      // right expression
-    char mOperator;             // operator: '+', '-', '*', '/', '%'
+    char mOperator [2];             // operator: '+', '-', '*', '/', '%'
 };
 

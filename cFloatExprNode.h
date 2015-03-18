@@ -22,6 +22,11 @@ class cFloatExprNode : public cExprNode
     {
         mFloatVal = value;
     }
+    
+    void GenerateCode()
+    {
+        EmitFloat(mFloatVal);
+    }
 
     // lookup and return type of 'float' in symbol table
     virtual cDeclNode *GetType()

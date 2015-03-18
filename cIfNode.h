@@ -34,6 +34,29 @@ class cIfNode : public cStmtNode
         result += "\n)";
         return result;
     }
+    
+    int Computeoffsets(int base)
+    {
+        mExpr->Computeoffsets(base);
+        mStmt->Computeoffsets(base);
+        
+        return base;
+    }
+    
+    void GenerateCode()
+    {
+        EmitString("if (");
+        mExpr->GenerateCode();
+        EmitString(")\n{\n");
+        mStmt->GenerateCode();
+        EmitString("}\n");
+        if (mElse != nullptr)
+        {
+          EmitString("else\n{\n");
+          mElse->GenerateCode();
+          EmitString("}\n");
+        }
+    }
 
   protected:
     cExprNode *mExpr;       // conditional expression

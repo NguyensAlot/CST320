@@ -96,6 +96,25 @@ class cFuncDeclNode : public cDeclNode
         return result;
     }
     
+    void GenerateCode()
+    {
+        EmitString("int ");
+        EmitString(mId->Name());
+        EmitString("( ");
+        
+        if(mParams != nullptr)
+            mParams->GenerateCode();
+        EmitString(" )\n{\n");
+        
+        if(mDecls != nullptr)
+            mDecls->GenerateCode();
+        
+        if(mStmts != nullptr)
+            mStmts->GenerateCode();
+        
+        EmitString("\n}\n");
+    }
+    
     virtual int Computeoffsets(int base)
     {
         // set offset to 0 because of its scope
@@ -108,8 +127,8 @@ class cFuncDeclNode : public cDeclNode
             offset = mDecls->Computeoffsets(offset);
         if (mStmts != nullptr)
             offset = mStmts->Computeoffsets(offset);
-        
-        mSize = mDecls->Size();
+        if (mDecls != nullptr)
+            mSize = mDecls->Size();
         return base;
     }
 

@@ -35,6 +35,22 @@ class cPrintNode : public cStmtNode
         mExpr->Computeoffsets(base);
         return base;
     }
+    
+    void GenerateCode()
+    {
+        if(mExpr->GetType()->IsInt())
+            EmitString("Temp = ");
+        else
+            EmitString("Temp_F = ");
+            
+        if(mExpr != nullptr)
+            mExpr->GenerateCode();
+        EmitString(";\n");
+        if(mExpr->GetType()->IsFloat())
+            EmitPrintTemp_F();
+        else
+            EmitPrintTemp();
+    }
 
   protected:
     cExprNode *mExpr;       // expression to be printed

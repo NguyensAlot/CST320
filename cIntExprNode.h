@@ -43,6 +43,11 @@ class cIntExprNode : public cExprNode
 
         return result;
     }
+    
+    void GenerateCode()
+    {
+        EmitInt(mIntVal);
+    }
 
   protected:
     int mIntVal;        // value of integer constant

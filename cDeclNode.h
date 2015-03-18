@@ -39,6 +39,7 @@ class cDeclNode : public cAstNode
 
         return false;
     }
+    virtual void GenerateCode() {}
   protected:
     static const int WORD_SIZE = 4;
     cSymbol *mId;

@@ -10,6 +10,7 @@
 //*******************************************************
 
 #include <iostream>
+#include "codegen.h"
 #include <string>
 
 class cAstNode
@@ -25,6 +26,10 @@ class cAstNode
     
     // compute the offset for each variable and return offset
     virtual int Computeoffsets(int base) { return base; }
+    
+    virtual void GenerateCode()
+    {
+    }
 
   protected:
     bool mSemanticError;        // true indicates this node has a semantic error
