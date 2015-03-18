@@ -1,6 +1,7 @@
 %{
 // Calc Parser
-// Phil Howard
+// Author: Phil Howard
+// Editor: Anthony Nguyen
 
 #include "lex.h"
 

@@ -5,6 +5,9 @@
 // Author: Philip Howard
 // Email:  phil.howard@oit.edu
 //
+// Editor: Anthony Nguyen
+// Email:  anthony.nguyen@oit.edu
+//
 // Date: 2/20/2015
 //
 //*******************************************************
@@ -50,6 +53,7 @@ class cIfNode : public cStmtNode
         EmitString(")\n{\n");
         mStmt->GenerateCode();
         EmitString("}\n");
+        
         if (mElse != nullptr)
         {
           EmitString("else\n{\n");

@@ -1,4 +1,16 @@
 #pragma once
+//*******************************************************
+// Purpose: Abstract class for all declarations
+//
+// Author: Philip Howard
+// Email:  phil.howard@oit.edu
+//
+// Editor: Anthony Nguyen
+// Email:  anthony.nguyen@oit.edu
+//
+// Date: 2/20/2015
+//
+//*******************************************************
 
 #include <string>
 #include "cAstNode.h"

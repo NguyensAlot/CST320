@@ -6,6 +6,9 @@
 // Author: Philip Howard
 // Email:  phil.howard@oit.edu
 //
+// Editor: Anthony Nguyen
+// Email:  anthony.nguyen@oit.edu
+//
 // Date: 2/20/2015
 //
 //*******************************************************

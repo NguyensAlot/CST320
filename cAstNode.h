@@ -5,6 +5,9 @@
 // Author: Philip Howard
 // Email:  phil.howard@oit.edu
 //
+// Editor: Anthony Nguyen
+// Email:  anthony.nguyen@oit.edu
+//
 // Date: 2/20/2015
 //
 //*******************************************************
@@ -27,9 +30,8 @@ class cAstNode
     // compute the offset for each variable and return offset
     virtual int Computeoffsets(int base) { return base; }
     
-    virtual void GenerateCode()
-    {
-    }
+    // generate code for lab 7
+    virtual void GenerateCode() {}
 
   protected:
     bool mSemanticError;        // true indicates this node has a semantic error
